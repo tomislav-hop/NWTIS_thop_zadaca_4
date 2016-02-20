@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="naslov">
+                NWTiS - zadaća 4
+            </ui:define>
+
+            <ui:define name="top">
+                Unos, ažuriranje adresa i pregled prognoza
+            </ui:define>
+
+            <ui:define name="left">
+                <h:link outcome="pocetak" value="Početna stranica"/><br/>
+                <h:link outcome="dnevnik" value="Pregled dnevnik"/><br/>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="forma">
+
+                    <h:outputLabel for="novaAdresa" value="Nova adresa"/>
+                    <h:inputText id="novaAdresa" value="#{odabirAdresaPrognoza.novaAdresa}"/>
+                    <h:commandButton value=" Dodaj adresu " action="#{odabirAdresaPrognoza.upisiAdresu}"/><br/>
+
+                    <h:panelGrid columns="3">
+
+                        <h:column>
+                            <h:selectOneListbox value="#{odabirAdresaPrognoza.odabranaAdresaZaDodati}">
+                                <f:selectItems value="#{odabirAdresaPrognoza.aktivneAdrese}"/>
+                            </h:selectOneListbox><br/>
+                        </h:column>
+                        <h:column>
+                            <h:commandButton value=" Preuzmi " action="#{odabirAdresaPrognoza.prebaciAdresu()}">
+                                <f:ajax render="forma" execute="forma"/>
+                            </h:commandButton><br/>
+
+                            <br/>
+                            <br/>
+                            <h:commandButton value=" Makni " action="#{odabirAdresaPrognoza.prebaciAdresuNazad()}">
+                                <f:ajax render="forma" execute="forma"/>
+                            </h:commandButton><br/><br/>       
+                            <h:commandButton value=" Otvori ažuriranje adrese " action="#{odabirAdresaPrognoza.otvoriAzuriranjeAdrese}">
+                                <f:ajax render="forma" execute="forma"/>
+                            </h:commandButton><br/><br/>
+                        </h:column>
+                        <h:column>
+
+
+
+                            <h:selectOneListbox value="#{odabirAdresaPrognoza.odabranaAdresaZaMaknuti}">
+                                <f:selectItems value="#{odabirAdresaPrognoza.prognozaAdrese}"/>
+                            </h:selectOneListbox><br/>
+                        </h:column>
+
+                    </h:panelGrid>
+                    <h:outputLabel for="azuriranaAdresa" value="Adresa" 
+                                   rendered="#{odabirAdresaPrognoza.prikaziAzuriranje==true}"/>
+                    <h:inputText id="azuriranaAdresa" value="#{odabirAdresaPrognoza.azuriranaAdresa}"
+                                 rendered="#{odabirAdresaPrognoza.prikaziAzuriranje==true}"/>
+                    <h:commandButton value=" Upiši adresu " action="#{odabirAdresaPrognoza.azurirajAdresu}"
+                                     rendered="#{odabirAdresaPrognoza.prikaziAzuriranje==true}">
+                        <f:ajax render="forma" execute="forma"/>
+                    </h:commandButton>
+                    <br/>
+
+
+
+                    <h:commandButton value=" Prikazi prognoze za odabrane adrese" action="#{odabirAdresaPrognoza.otvoriPrikazivanjePrognoze}"/><br/>
+                    <h:outputLabel for="brojDana" value="Broj dana za prognoze"/><br/>
+                    <h:inputText id="brojDana" value="#{odabirAdresaPrognoza.brojDana}"/>
+                    <font color="red"><h:outputLabel value="#{odabirAdresaPrognoza.poruka}" rendered="#{odabirAdresaPrognoza.prikaziError==true}" /><br/></font>
+                    <br/>                   
+                    
+                    <br/><br/><br/>
+
+                    <b><h:outputLabel value="Prognoze" rendered="#{odabirAdresaPrognoza.prikaziPrognoze==true}"></h:outputLabel><br/></b>
+
+                    <h:commandButton value=" Zatvori prognoze " action="#{odabirAdresaPrognoza.zatvoriPrognozu()}"
+                                     rendered="#{odabirAdresaPrognoza.prikaziPrognoze==true}">
+                        <f:ajax render="forma" execute="forma"/>
+                    </h:commandButton>
+
+                    <h:dataTable value="#{odabirAdresaPrognoza.mpp}" var="a" rendered="#{odabirAdresaPrognoza.prikaziPrognoze==true}" border="2" style="width:100%" >
+                        <h:column>
+                            <f:facet name="header" >Adresa</f:facet>
+                                #{a.adresa}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Dan</f:facet>
+                                #{a.dan}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Temperatura</f:facet>
+                                #{a.prognoza.temp}
+                        </h:column>     
+                        <h:column>
+                            <f:facet name="header" >Pritisak</f:facet>
+                                #{a.prognoza.pressure}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Vlaga</f:facet>
+                                #{a.prognoza.humidity}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Vrijeme</f:facet>
+                                #{a.prognoza.weather}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Oblaci</f:facet>
+                                #{a.prognoza.clouds}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Brzina vjetra</f:facet>
+                                #{a.prognoza.windSpeed}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Datum</f:facet>
+                                #{a.datum}
+                        </h:column>
+                    </h:dataTable>
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                Tomislav Hop &copy; 2015
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

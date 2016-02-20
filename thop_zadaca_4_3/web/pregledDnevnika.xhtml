@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="naslov">
+                NWTiS - zadaća 4
+            </ui:define>
+
+            <ui:define name="top">
+                Pregled dnevnika
+            </ui:define>
+
+            <ui:define name="left">
+                <h:link outcome="pocetak" value="Početna stranica"/><br/>
+                <h:link outcome="adrese" value="Adrese i prognoze"/><br/>
+            </ui:define>
+
+            <ui:define name="content">
+                <h:form id="forma">
+                    <h:dataTable value="#{pregledDnevnika.dp}" var="a" border="2" style="width:100%" >
+                        <h:column>
+                            <f:facet name="header" >ID</f:facet>
+                                #{a.id}
+                        </h:column><h:column>
+                            <f:facet name="header" >Korisnik: </f:facet>
+                                #{a.korisnik}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >URL: </f:facet>
+                                #{a.url}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >IP Adresa: </f:facet>
+                                #{a.ipadresa}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Vrijeme: </f:facet>
+                                #{a.vrijeme}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Trajanje veće od: </f:facet>
+                                #{a.trajanje}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header" >Status</f:facet>
+                                #{a.status}
+                        </h:column>
+                    </h:dataTable>
+
+
+                    <h:commandButton value=" Prikazi obrazac za filtriranje" action="#{pregledDnevnika.otvoriFiltriranje()}">
+                        <f:ajax render="forma" execute="forma"/>
+                    </h:commandButton>
+                    <br/><br/><br/>  
+                    <h:commandButton value=" Zatvori obrazac za filtriranje " action="#{pregledDnevnika.zatvoriFiltriranje()}"
+                                     rendered="#{pregledDnevnika.prikaziFiltriranje==true}">
+                        <f:ajax render="forma" execute="forma"/>
+                    </h:commandButton><br/><br/>
+                    <b><h:outputLabel value="Obrazac za filtriranje" rendered="#{pregledDnevnika.prikaziFiltriranje==true}"></h:outputLabel><br/></b>
+
+                    <h:panelGrid columns="2" rendered="#{pregledDnevnika.prikaziFiltriranje==true}">
+                        <h:outputLabel for="kor" value="Korisnik:"/>
+                        <h:inputText id="kor" value="#{pregledDnevnika.korisnik}"/>
+
+                        <h:outputLabel for="ip" value="IP Adresa:"/>
+                        <h:inputText id="ip" value="#{pregledDnevnika.ipadresa}"/>
+
+                        <h:outputLabel for="trajanje" value="Trajanje veće od:"/>
+                        <h:inputText id="trajanje" value="#{pregledDnevnika.trajanje}"/>
+
+                        <h:outputLabel for="status" value="Status:"/>
+                        <h:inputText id="status" value="#{pregledDnevnika.status}" />
+                    </h:panelGrid>
+                    <h:commandButton value=" Filtriraj podatke " action="#{pregledDnevnika.filtriranje()}"
+                                     rendered="#{pregledDnevnika.prikaziFiltriranje==true}">
+                        <f:ajax render="forma" execute="forma"/>
+                    </h:commandButton><br/><br/>
+
+
+                </h:form>
+            </ui:define>
+
+            <ui:define name="bottom">
+                Tomislav Hop &copy; 2015
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
